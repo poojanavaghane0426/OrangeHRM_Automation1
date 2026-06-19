@@ -1,14 +1,14 @@
 *** Settings ***
-Library    String 
-Library     SeleniumLibrary
-Library     OperatingSystem
-Variables   ../../../Data/config.py
-Variables    ${DATA_PATH}
-Variables    ${URL_PATH}
-Variables    ${XPATH_PATH}
+Library    String
+Library    SeleniumLibrary
+Variables    ../../../Data/QA/data.py
+Variables    ../../../Data/QA/urls.py
+Variables    ../../../Data/QA/xpaths.py
 
 
 *** Keywords ***
+
+#  LOGIN FLOW
 
 Open Login Page
     Open Browser    ${LOGIN_URL}    ${BROWSER}
@@ -19,7 +19,6 @@ Login With Valid Credentials
     Input Text    ${USERNAME_FIELD}    ${VALID_USERNAME}
     Input Text    ${PASSWORD_FIELD}    ${VALID_PASSWORD}
     Click Button  ${LOGIN_BUTTON}
-
 
 Login With Invalid Credentials
     Input Text    ${USERNAME_FIELD}    ${INVALID_USERNAME}
@@ -33,6 +32,8 @@ Verify Login Failure Message
     Wait Until Element Is Visible    ${ERROR_MESSAGE}    ${EXPLICIT_WAIT}
     Element Should Contain    ${ERROR_MESSAGE}    ${INVALID_CREDENTIALS_TEXT}
 
+
+#  LOGOUT FLOW
 Perform Logout
     Wait Until Element Is Visible    ${PROFILE_DROPDOWN}    ${EXPLICIT_WAIT}
     Click Element    ${PROFILE_DROPDOWN}
@@ -44,6 +45,8 @@ Perform Logout
 Verify Logout Successful
     Wait Until Location Contains    /login    ${EXPLICIT_WAIT}
 
+
+#  ADD EMPLOYEE (PIM)
 Add Employee
     ${menu}=   Evaluate   "${MENU_XPATH}".replace("REPLACE_MENU", "PIM")
     Wait Until Element Is Visible    ${menu}    ${EXPLICIT_WAIT}
@@ -61,6 +64,8 @@ Add Employee
 Verify Employee Added
     Wait Until Element Is Visible    ${PERSONAL_DETAILS_TEXT}    ${EXPLICIT_WAIT}
 
+
+#  SEARCH EMPLOYEE (PIM)
 Search Employee
     ${menu}=   Evaluate   "${MENU_XPATH}".replace("REPLACE_MENU", "PIM")
     Wait Until Element Is Visible    ${menu}    ${EXPLICIT_WAIT}
@@ -74,6 +79,8 @@ Verify Employee Found
     ${emp}=    Replace String    ${EMPLOYEE_RECORD}    REPLACE_EMPLOYEE    ${SEARCH_EMPLOYEE_NAME}
     Wait Until Element Is Visible    ${emp}    ${EXPLICIT_WAIT}
 
+
+# UI VALIDATION
 Verify Login Page UI
     Wait Until Element Is Visible    ${USERNAME_FIELD}    ${EXPLICIT_WAIT}
     Element Should Be Visible        ${LOGIN_HEADER}
